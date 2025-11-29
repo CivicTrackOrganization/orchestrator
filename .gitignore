@@ -1,0 +1,4 @@
+temp_backend/
+temp_frontend/
+
+.env

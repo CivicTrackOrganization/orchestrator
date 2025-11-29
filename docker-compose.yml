@@ -1,0 +1,44 @@
+services:
+  backend:
+    build:
+      context: ./temp_backend
+      dockerfile: ../Dockerfile.be
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        while ! nc -z db 5432; do
+        sleep 1
+        done;
+      echo 'Database is ready!' &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+  frontend:
+    build:
+      context: ./temp_frontend/frontend-react
+      dockerfile: ../../Dockerfile.fe
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    env_file:
+      - .env
+  db:
+    build:
+      dockerfile: ../../../Dockerfile.db
+      context: ./temp_backend/docker/db
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

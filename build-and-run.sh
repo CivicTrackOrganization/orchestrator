@@ -2,20 +2,24 @@ FRONTEND_REPO_URL="https://github.com/CivicTrackOrganization/frontend.git"
 BACKEND_REPO_URL="https://github.com/anaradzetski/civic-track.git"
 FRONTEND_DIR="temp_frontend"
 BACKEND_DIR="temp_backend"
+ENV_FILE=".env"
 
 echo "1. Cloning repositories..."
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "ERROR: Required environment file '$ENV_FILE' not found. Please create it locally."
+    exit 1
+fi
 
 rm -rf $FRONTEND_DIR $BACKEND_DIR
 
 git clone $FRONTEND_REPO_URL $FRONTEND_DIR
-
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to fetch frontend repository. Exiting."
     exit 1
 fi
 
 git clone $BACKEND_REPO_URL $BACKEND_DIR
-
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to fetch backend repository. Exiting."
     exit 1
@@ -23,7 +27,7 @@ fi
 
 echo "2. Building images and running containers..."
 
-docker-compose up --build -d
+docker-compose --env-file "$ENV_FILE" up --build  -d
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Docker Compose failed to build or run. Exiting without cleanup."

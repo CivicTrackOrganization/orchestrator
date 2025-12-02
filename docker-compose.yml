@@ -23,12 +23,13 @@ services:
     build:
       context: ./temp_frontend/frontend-react
       dockerfile: ../../Dockerfile.fe
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_MAPBOX_TOKEN: ${VITE_MAPBOX_TOKEN}
     ports:
       - "3000:80"
     depends_on:
       - backend
-    env_file:
-      - .env
   db:
     build:
       dockerfile: ../../../Dockerfile.db

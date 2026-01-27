@@ -1,5 +1,5 @@
 FRONTEND_REPO_URL="https://github.com/CivicTrackOrganization/frontend.git"
-BACKEND_REPO_URL="https://github.com/anaradzetski/civic-track.git"
+BACKEND_REPO_URL="https://github.com/CivicTrackOrganization/backend.git"
 FRONTEND_DIR="temp_frontend"
 BACKEND_DIR="temp_backend"
 ENV_FILE=".env"
